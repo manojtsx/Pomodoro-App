@@ -31,7 +31,7 @@ function App() {
       timerState: timerStates.Stopped,
       timeLeft: 25 * 60,
       timeLeftDisplay: formatTime(25 * 60),
-      message: "Focus on your task",
+      message: "Time to Work!",
     },
     shortBreak: {
       type: "Short Break",
@@ -39,7 +39,7 @@ function App() {
       timerState: timerStates.Stopped,
       timeLeft: 5 * 60,
       timeLeftDisplay: formatTime(5 * 60),
-      message: "Take a short break",
+      message: "Time for Break!",
     },
   };
 
@@ -98,10 +98,12 @@ const endTimer = () => {
     }));
     
     // Automatically switch to the other timer (Pomodoro or Short Break) after ending
-    setTimeout(() => {
-      const nextTimer = currentTimer.type === timers.pomodoro.type ? timers.shortBreak : timers.pomodoro;
-      setCurrentTimer(nextTimer);
-    }, 2000); // Set a timeout for transitioning (2 seconds in this example)
+      setCurrentTimer((prevTimer) => {
+        if (prevTimer.type === timers.pomodoro.type) {
+          return timers.shortBreak; // Switch to Short Break
+        }
+        return prevTimer; // Return the current timer if it's not the Pomodoro
+      });
   };
   
   
